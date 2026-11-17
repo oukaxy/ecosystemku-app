@@ -95,10 +95,7 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
                 supportZoom: false,
               ),
               onConsoleMessage: (controller, consoleMessage) {
-                debugPrint(
-                  'Rem console[${consoleMessage.messageLevel.name}]: '
-                  '${consoleMessage.message}',
-                );
+                debugPrint('Rem console: ${consoleMessage.message}');
               },
               onLoadError: (controller, url, code, message) {
                 setState(() {
