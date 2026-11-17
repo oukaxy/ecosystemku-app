@@ -1189,19 +1189,19 @@ untuk eksekusi; sebelum mulai, buat plan TDD detail untuk fase tersebut.
 
 ### Fase 0 — Fondasi & De-risk (1,5–2 minggu)
 
-- [ ] **0.1 Scaffold** `app/` + `pubspec.yaml` + lints + struktur folder + `main.dart` kosong.
+- [x] **0.1 Scaffold** `app/` + `pubspec.yaml` + lints + struktur folder + `main.dart` kosong.
   - Test: `flutter analyze` bersih, `flutter test` jalan (satu smoke test).
-- [ ] **0.2 CI** workflow Android, build APK unsigned di PR, signed di tag.
+- [x] **0.2 CI** workflow Android, build APK unsigned di PR, signed di tag.
   - Test: workflow hijau, artifact APK bisa diinstal.
-- [ ] **0.3 Design tokens + 8 komponen inti** (Scaffold, Card, SectionHeader, EmptyState,
+- [x] **0.3 Design tokens + 8 komponen inti** (Scaffold, Card, SectionHeader, EmptyState,
   ConfirmSheet, SnackBar, StatTile, SearchField) + halaman contoh light/dark.
   - Test: widget test render di kedua tema + text scale 1.3.
-- [ ] **0.4 Skema Drift v1** semua tabel + DAO dasar + test migrasi awal.
+- [x] **0.4 Skema Drift v1** semua tabel + DAO dasar + test migrasi awal.
   - Test: buat DB, insert/read per domain, invariant transfer.
-- [ ] **0.5 Backup service** serializer v3 + parser v2/v3 + merge/replace +
+- [x] **0.5 Backup service** serializer v3 + parser v2/v3 + merge/replace +
   ringkasan + fixture ZIP.
   - Test: round-trip, merge duplikat, file rusak, savings ikut.
-- [ ] **0.6 Live2D spike**: WebView + localhost asset server + model Rem +
+- [x] **0.6 Live2D spike**: WebView + localhost asset server + model Rem +
   `setExpression` + putar satu audio + pause/resume.
   - Test: APK spike di perangkat; log `ready`; ekspresi berubah; audio sync.
   - Gate: jika gagal karena lisensi/teknis, putuskan fallback sebelum Fase 1.
@@ -1214,14 +1214,14 @@ terbukti atau fallback disetujui, CI hijau.
 
 ### Fase 1 — Shell, Apps, Setelan, Asisten Chat (2 minggu)
 
-- [ ] **1.1 Shell** 3 tab + router + back handling + theme mode.
-- [ ] **1.2 Apps grid** + 6 kartu ringkasan + query + skeleton/error per kartu.
-- [ ] **1.3 Setelan** profil, AI key (secure storage + test), backup export/import,
+- [x] **1.1 Shell** 3 tab + router + back handling + theme mode.
+- [x] **1.2 Apps grid** + 6 kartu ringkasan + query + skeleton/error per kartu.
+- [x] **1.3 Setelan** profil, AI key (secure storage + test), backup export/import,
   tema, data per app (placeholder app yang belum ada), tentang.
 - [ ] **1.4 Onboarding + import wizard** (baca ZIP, ringkasan, merge/replace).
-- [ ] **1.5 Asisten UI** chat, streaming, stop, error, tag parser, apps sheet,
+- [x] **1.5 Asisten UI** chat, streaming, stop, error, tag parser, apps sheet,
   mute, ekspresi bar (tanpa Live2D dulu: avatar statis).
-- [ ] **1.6 AI client** chat + TTS, mode server/personal, chunking, fixture parser.
+- [x] **1.6 AI client** chat + TTS, mode server/personal, chunking, fixture parser.
 - [ ] **1.7 TTS playback** via WebView/just_audio sementara; status mute.
 - [ ] **1.8 Rilis `v0.2`** APK internal.
 
