@@ -21,6 +21,8 @@ class SettingsRepository {
   SettingsRepository(this.dao);
 
   static const themeKey = 'settings.theme';
+  static const habitTimeKey = 'notif_habit_time';
+  static const todoTimeKey = 'notif_todo_time';
 
   final MetaDao dao;
 
@@ -29,4 +31,8 @@ class SettingsRepository {
 
   Future<void> setTheme(ThemeSetting theme) =>
       dao.setString(themeKey, theme.name);
+
+  Future<String?> get(String key) => dao.getString(key);
+
+  Future<void> set(String key, String value) => dao.setString(key, value);
 }
