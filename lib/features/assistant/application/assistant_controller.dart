@@ -57,8 +57,12 @@ class AssistantState {
 }
 
 class AssistantController extends StateNotifier<AssistantState> {
-  AssistantController(this._ai, this._readBridge, {this.systemPrompt})
-      : super(const AssistantState.initial());
+  AssistantController(
+    this._ai,
+    this._readBridge, {
+    this.systemPrompt,
+    this.systemPromptLoader,
+  }) : super(const AssistantState.initial());
 
   static const maxHistory = 10;
   static const maxMessageChars = 4000;
@@ -66,7 +70,26 @@ class AssistantController extends StateNotifier<AssistantState> {
   final AiClient _ai;
   final Live2DBridge? Function() _readBridge;
   final String? systemPrompt;
+  final Future<String?> Function()? systemPromptLoader;
   StreamSubscription<String>? _subscription;
+  String _currentExpression = 'none';
+  String? _loadedPrompt;
+  bool _promptLoaded = false;
+
+  Future<String?> _resolveSystemPrompt() async {
+    if (systemPrompt != null) return systemPrompt;
+    final loader = systemPromptLoader;
+    if (loader == null) return null;
+    if (!_promptLoaded) {
+      try {
+        _loadedPrompt = await loader();
+      } catch (_) {
+        _loadedPrompt = null;
+      }
+      _promptLoaded = true;
+    }
+    return _loadedPrompt;
+  }
 
   Future<void> send(String raw) async {
     final content = raw.trim();
@@ -90,12 +113,13 @@ class AssistantController extends StateNotifier<AssistantState> {
 
     final buffer = StringBuffer();
     final bridgeAtStart = _readBridge();
+    final prompt = await _resolveSystemPrompt();
     final subscription = _ai
         .chatStream(
           messages: history,
           context: {
-            if (systemPrompt != null) 'systemPrompt': systemPrompt,
-            'expression': 'none',
+            if (prompt != null) 'systemPrompt': prompt,
+            'expression': _currentExpression,
           },
         )
         .listen(
@@ -104,6 +128,7 @@ class AssistantController extends StateNotifier<AssistantState> {
             final parsed = AssistantTags.parse(buffer.toString());
             _updateStreaming(parsed.text, parsed.expression);
             if (parsed.expression != 'none') {
+              _currentExpression = parsed.expression;
               bridgeAtStart?.setExpression(parsed.expression);
             }
           },

@@ -16,6 +16,13 @@ Future<Map<String, dynamic>> loadCharacterConfig() async {
   return decoded is Map<String, dynamic> ? decoded : <String, dynamic>{};
 }
 
+/// Reads the persona prompt from the synced character manifest.
+Future<String?> loadSystemPrompt() async {
+  final config = await loadCharacterConfig();
+  final prompt = config['systemPrompt'];
+  return prompt is String && prompt.trim().isNotEmpty ? prompt : null;
+}
+
 final aiClientProvider = Provider<AiClient>((ref) {
   final client = ServerAiClient();
   ref.onDispose(client.close);
@@ -27,6 +34,7 @@ final assistantControllerProvider = StateNotifierProvider.autoDispose<
   return AssistantController(
     ref.watch(aiClientProvider),
     () => ref.read(live2dBridgeProvider),
+    systemPromptLoader: loadSystemPrompt,
   );
 });
 

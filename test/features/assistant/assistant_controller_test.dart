@@ -7,9 +7,10 @@ import 'package:ecosystemku/features/assistant/application/live2d_bridge.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _FakeAi implements AiClient {
-  _FakeAi(this.chunks);
+  _FakeAi(this.chunks, {this.onContext});
 
   final List<String> chunks;
+  final void Function(Map<String, dynamic>? context)? onContext;
   int ttsCalls = 0;
 
   @override
@@ -17,6 +18,7 @@ class _FakeAi implements AiClient {
     required List<ChatTurn> messages,
     Map<String, dynamic>? context,
   }) async* {
+    onContext?.call(context);
     for (final chunk in chunks) {
       await Future<void>.delayed(const Duration(milliseconds: 1));
       yield chunk;
@@ -105,6 +107,29 @@ void main() {
     expect(controller.state.isStreaming, isFalse);
     expect(controller.state.error, isNull);
     expect(bridge.expressions, contains('happy'));
+  });
+
+  test('persona prompt is loaded from the manifest and reused', () async {
+    final contexts = <Map<String, dynamic>?>[];
+    var loads = 0;
+    final ai = _FakeAi(['ok'], onContext: contexts.add);
+    final controller = AssistantController(
+      ai,
+      () => _FakeBridge(),
+      systemPromptLoader: () async {
+        loads++;
+        return 'PROMPT REM';
+      },
+    );
+
+    await controller.send('satu');
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    await controller.send('dua');
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(loads, 1);
+    expect(contexts.first?['systemPrompt'], 'PROMPT REM');
+    expect(contexts.last?['systemPrompt'], 'PROMPT REM');
   });
 
   test('stop cancels streaming and keeps partial text', () async {
