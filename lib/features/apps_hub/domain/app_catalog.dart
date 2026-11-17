@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/tokens.dart';
 
 enum AppTargetKind { tab, route, external }
 
@@ -34,42 +33,42 @@ const appCatalog = <EcosystemApp>[
     id: 'daily-os',
     name: 'Daily OS',
     icon: Icons.check_circle_outline,
-    accent: EcosystemAccents.standard.dailyOs,
+    accent: Color(0xFF2F8F83),
     target: AppTarget(AppTargetKind.route, '/app/daily-os'),
   ),
   EcosystemApp(
     id: 'ideku',
     name: 'IdeKu',
     icon: Icons.lightbulb_outline,
-    accent: EcosystemAccents.standard.ideku,
+    accent: Color(0xFF6366F1),
     target: AppTarget(AppTargetKind.route, '/app/ideku'),
   ),
   EcosystemApp(
     id: 'kronik',
     name: 'Kronik',
     icon: Icons.menu_book_outlined,
-    accent: EcosystemAccents.standard.kronik,
+    accent: Color(0xFFC9A84C),
     target: AppTarget(AppTargetKind.route, '/app/kronik'),
   ),
   EcosystemApp(
     id: 'cucimoney',
     name: 'CuciMoney+',
     icon: Icons.account_balance_wallet_outlined,
-    accent: EcosystemAccents.standard.cucimoney,
+    accent: Color(0xFF2F5D8A),
     target: AppTarget(AppTargetKind.route, '/app/cucimoney'),
   ),
   EcosystemApp(
     id: 'linkku',
     name: 'LinkKu',
     icon: Icons.link_rounded,
-    accent: EcosystemAccents.standard.linkku,
+    accent: Color(0xFF8B5CF6),
     target: AppTarget(AppTargetKind.route, '/app/linkku'),
   ),
   EcosystemApp(
     id: 'assistant',
     name: 'Asisten',
     icon: Icons.auto_awesome_outlined,
-    accent: EcosystemAccents.standard.assistant,
+    accent: Color(0xFF5B9CF6),
     target: AppTarget(AppTargetKind.tab, '/assistant'),
   ),
   EcosystemApp(

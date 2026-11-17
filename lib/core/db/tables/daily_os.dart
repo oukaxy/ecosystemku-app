@@ -18,7 +18,7 @@ class Habits extends Table {
 class HabitSubtasks extends Table {
   TextColumn get id => text()();
   TextColumn get habitId => text()();
-  TextColumn get text => text()();
+  TextColumn get taskText => text().named('text')();
   IntColumn get sort => integer().withDefault(const Constant(0))();
 
   @override
@@ -29,7 +29,7 @@ class HabitChecks extends Table {
   TextColumn get habitId => text()();
   TextColumn get date => text()();
   TextColumn get subtaskId => text()();
-  TextColumn get text => text().withDefault(const Constant(''))();
+  TextColumn get taskText => text().named('text').withDefault(const Constant(''))();
   IntColumn get completedAt => integer()();
 
   @override
@@ -52,7 +52,7 @@ class Todos extends Table {
 class TodoSubtasks extends Table {
   TextColumn get id => text()();
   TextColumn get todoId => text()();
-  TextColumn get text => text()();
+  TextColumn get taskText => text().named('text')();
   BoolColumn get done => boolean().withDefault(const Constant(false))();
   IntColumn get sort => integer().withDefault(const Constant(0))();
 

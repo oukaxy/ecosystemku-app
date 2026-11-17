@@ -47,7 +47,7 @@ class AppsHubPage extends ConsumerWidget {
             const DailyOsSnapshotCard(),
             const SizedBox(height: EcosystemSpacing.x3),
             IntrinsicHeight(
-              child: Row(
+              child: const Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: const [
                   Expanded(child: IdekuSnapshotCard()),

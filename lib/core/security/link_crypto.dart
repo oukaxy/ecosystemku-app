@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
+import 'package:crypto/crypto.dart' show sha256;
 import 'package:cryptography/cryptography.dart';
 
 class LinkCryptoException implements Exception {
