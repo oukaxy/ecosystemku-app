@@ -20,6 +20,8 @@ for name in ('build.gradle.kts', 'build.gradle'):
     text = path.read_text()
     text = text.replace('minSdk = flutter.minSdkVersion', 'minSdk = 26')
     text = text.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 26')
+    text = text.replace('compileSdk = flutter.compileSdkVersion', 'compileSdk = 36')
+    text = text.replace('compileSdkVersion flutter.compileSdkVersion', 'compileSdkVersion 36')
     text = text.replace('com.example.ecosystemku', 'com.oukaxy.ecosystemku')
     path.write_text(text)
 
