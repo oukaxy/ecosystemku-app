@@ -109,17 +109,13 @@ void main() {
     expect(bridge.expressions, contains('happy'));
   });
 
-  test('persona prompt is loaded from the manifest and reused', () async {
+  test('persona prompt is sent as context', () async {
     final contexts = <Map<String, dynamic>?>[];
-    var loads = 0;
-    final ai = _FakeAi(['ok'], onContext: contexts.add);
+    final ai = _FakeAi(['ok [EXPR:shame]'], onContext: contexts.add);
     final controller = AssistantController(
       ai,
       () => _FakeBridge(),
-      systemPromptLoader: () async {
-        loads++;
-        return 'PROMPT REM';
-      },
+      systemPrompt: 'PROMPT REM',
     );
 
     await controller.send('satu');
@@ -127,9 +123,9 @@ void main() {
     await controller.send('dua');
     await Future<void>.delayed(const Duration(milliseconds: 20));
 
-    expect(loads, 1);
     expect(contexts.first?['systemPrompt'], 'PROMPT REM');
-    expect(contexts.last?['systemPrompt'], 'PROMPT REM');
+    expect(contexts.first?['expression'], 'none');
+    expect(contexts.last?['expression'], 'shame');
   });
 
   test('stop cancels streaming and keeps partial text', () async {

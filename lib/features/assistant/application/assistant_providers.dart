@@ -16,12 +16,9 @@ Future<Map<String, dynamic>> loadCharacterConfig() async {
   return decoded is Map<String, dynamic> ? decoded : <String, dynamic>{};
 }
 
-/// Reads the persona prompt from the synced character manifest.
-Future<String?> loadSystemPrompt() async {
-  final config = await loadCharacterConfig();
-  final prompt = config['systemPrompt'];
-  return prompt is String && prompt.trim().isNotEmpty ? prompt : null;
-}
+/// Character manifest loaded once at startup (see main.dart).
+final characterConfigProvider =
+    Provider<Map<String, dynamic>>((ref) => const {});
 
 final aiClientProvider = Provider<AiClient>((ref) {
   final client = ServerAiClient();
@@ -31,10 +28,11 @@ final aiClientProvider = Provider<AiClient>((ref) {
 
 final assistantControllerProvider = StateNotifierProvider.autoDispose<
     AssistantController, AssistantState>((ref) {
+  final prompt = ref.watch(characterConfigProvider)['systemPrompt'];
   return AssistantController(
     ref.watch(aiClientProvider),
     () => ref.read(live2dBridgeProvider),
-    systemPromptLoader: loadSystemPrompt,
+    systemPrompt: prompt is String && prompt.trim().isNotEmpty ? prompt : null,
   );
 });
 
