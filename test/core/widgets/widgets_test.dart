@@ -85,11 +85,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: EcosystemTheme.dark(),
-        home: Builder(
-          builder: (context) {
-            ctx = context;
-            return const SizedBox();
-          },
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );
@@ -110,11 +112,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: EcosystemTheme.dark(),
-        home: Builder(
-          builder: (context) {
-            ctx = context;
-            return const SizedBox();
-          },
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );

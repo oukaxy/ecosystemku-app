@@ -1,6 +1,8 @@
 import 'package:ecosystemku/app.dart';
 import 'package:ecosystemku/core/router/app_router.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_engine.dart';
+import 'package:ecosystemku/features/assistant/application/assistant_providers.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,7 +28,12 @@ void main() {
     final engine = _FakeEngine();
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [assistantEngineProvider.overrideWithValue(engine)],
+        overrides: [
+          assistantEngineProvider.overrideWithValue(engine),
+          live2dStageBuilderProvider.overrideWithValue(
+            (context) => const SizedBox.shrink(),
+          ),
+        ],
         child: const EcosystemApp(),
       ),
     );
@@ -46,14 +53,16 @@ void main() {
     await tester.tap(find.text('Setelan'));
     await tester.pumpAndSettle();
     expect(engine.visible, isFalse);
-    expect(find.text('Profil, backup, dan kunci AI akan tampil di sini.'),
-        findsOneWidget);
+    expect(find.text('PROFIL'), findsOneWidget);
   });
 
   testWidgets('sub-app route hides bottom navigation', (tester) async {
     final container = ProviderContainer(
       overrides: [
         assistantEngineProvider.overrideWithValue(_FakeEngine()),
+        live2dStageBuilderProvider.overrideWithValue(
+            (context) => const SizedBox.shrink(),
+          ),
       ],
     );
     addTearDown(container.dispose);
@@ -78,6 +87,9 @@ void main() {
       ProviderScope(
         overrides: [
           assistantEngineProvider.overrideWithValue(_FakeEngine()),
+          live2dStageBuilderProvider.overrideWithValue(
+            (context) => const SizedBox.shrink(),
+          ),
         ],
         child: const EcosystemApp(),
       ),
@@ -98,6 +110,9 @@ void main() {
       ProviderScope(
         overrides: [
           assistantEngineProvider.overrideWithValue(_FakeEngine()),
+          live2dStageBuilderProvider.overrideWithValue(
+            (context) => const SizedBox.shrink(),
+          ),
         ],
         child: const EcosystemApp(),
       ),

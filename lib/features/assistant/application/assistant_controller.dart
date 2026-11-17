@@ -128,6 +128,7 @@ class AssistantController extends StateNotifier<AssistantState> {
   }
 
   void _finish({String? error}) {
+    final settledError = error ?? state.error;
     final messages = [...state.messages];
     for (var i = messages.length - 1; i >= 0; i--) {
       final message = messages[i];
@@ -143,7 +144,7 @@ class AssistantController extends StateNotifier<AssistantState> {
     state = AssistantState(
       messages: messages,
       isStreaming: false,
-      error: error,
+      error: settledError,
     );
   }
 

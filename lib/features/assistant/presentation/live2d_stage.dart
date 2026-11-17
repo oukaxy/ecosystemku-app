@@ -24,10 +24,12 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
   String? _error;
   bool _ready = false;
   WebViewLive2DBridge? _bridge;
+  StateController<Live2DBridge?>? _bridgeController;
 
   @override
   void initState() {
     super.initState();
+    _bridgeController = ref.read(live2dBridgeProvider.notifier);
     Live2DHost.ensureStarted().then((url) {
       if (mounted) setState(() => _url = url);
     }).catchError((Object error) {
@@ -37,9 +39,9 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
 
   @override
   void dispose() {
-    final current = ref.read(live2dBridgeProvider);
-    if (current == _bridge) {
-      ref.read(live2dBridgeProvider.notifier).state = null;
+    final controller = _bridgeController;
+    if (controller != null && controller.state == _bridge) {
+      controller.state = null;
     }
     super.dispose();
   }

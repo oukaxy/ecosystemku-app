@@ -6,6 +6,7 @@ import 'package:ecosystemku/core/db/daos/meta_dao.dart';
 import 'package:ecosystemku/core/providers.dart';
 import 'package:ecosystemku/core/security/secure_store.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_engine.dart';
+import 'package:ecosystemku/features/assistant/application/assistant_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,6 +49,9 @@ void main() {
           secureStoreProvider.overrideWithValue(secureStore),
           clockProvider.overrideWithValue(_FixedClock(DateTime(2026, 11, 17, 20))),
           assistantEngineProvider.overrideWithValue(_FakeEngine()),
+          live2dStageBuilderProvider.overrideWithValue(
+          (context) => const SizedBox.shrink(),
+        ),
         ],
         child: const EcosystemApp(),
       ),
@@ -59,13 +63,13 @@ void main() {
   testWidgets('renders every settings section', (tester) async {
     await pumpSettings(tester);
 
-    expect(find.text('Profil'), findsOneWidget);
-    expect(find.text('Kunci AI'), findsOneWidget);
-    expect(find.text('Backup'), findsOneWidget);
-    expect(find.text('Tampilan'), findsOneWidget);
-    expect(find.text('Notifikasi'), findsOneWidget);
-    expect(find.text('Data'), findsOneWidget);
-    expect(find.text('Tentang'), findsOneWidget);
+    expect(find.text('PROFIL'), findsOneWidget);
+    expect(find.text('KUNCI AI'), findsOneWidget);
+    expect(find.text('BACKUP'), findsOneWidget);
+    expect(find.text('TAMPILAN'), findsOneWidget);
+    expect(find.text('NOTIFIKASI'), findsOneWidget);
+    expect(find.text('DATA'), findsOneWidget);
+    expect(find.text('TENTANG'), findsOneWidget);
   });
 
   testWidgets('shows masked keys from secure storage', (tester) async {
@@ -89,6 +93,7 @@ void main() {
     await pumpSettings(tester);
 
     await tester.enterText(find.byType(TextField).first, 'Mahfud');
+    await tester.pump();
     await tester.tap(find.text('Simpan'));
     await tester.pumpAndSettle();
 
@@ -99,6 +104,12 @@ void main() {
   testWidgets('theme choice persists to app_meta', (tester) async {
     await pumpSettings(tester);
 
+    await tester.scrollUntilVisible(
+      find.text('Terang'),
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Terang'));
     await tester.pumpAndSettle();
 
@@ -122,6 +133,7 @@ void main() {
       400,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Hapus semua'));
     await tester.pumpAndSettle();
 

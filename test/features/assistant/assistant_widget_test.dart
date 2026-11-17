@@ -5,6 +5,7 @@ import 'package:ecosystemku/core/ai/ai_client.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_providers.dart';
 import 'package:ecosystemku/features/assistant/presentation/assistant_page.dart';
 import 'package:ecosystemku/features/assistant/presentation/chat_panel.dart';
+import 'package:ecosystemku/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -50,7 +51,10 @@ void main() {
             (context) => const SizedBox.expand(),
           ),
         ],
-        child: const MaterialApp(home: AssistantPage()),
+        child: MaterialApp(
+          theme: EcosystemTheme.dark(),
+          home: const AssistantPage(),
+        ),
       ),
     );
     await tester.pumpAndSettle();

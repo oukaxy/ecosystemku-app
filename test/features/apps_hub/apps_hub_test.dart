@@ -5,6 +5,8 @@ import 'package:ecosystemku/core/db/database.dart';
 import 'package:ecosystemku/core/providers.dart';
 import 'package:ecosystemku/core/widgets/app_tile.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_engine.dart';
+import 'package:ecosystemku/features/assistant/application/assistant_providers.dart';
+
 import 'package:ecosystemku/features/apps_hub/domain/app_catalog.dart' show appCatalog;
 import 'package:ecosystemku/features/cucimoney/data/finance_summary.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,9 @@ void main() {
         databaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(_FixedClock(DateTime(2026, 11, 17, 20))),
         assistantEngineProvider.overrideWithValue(_FakeEngine()),
+        live2dStageBuilderProvider.overrideWithValue(
+            (context) => const SizedBox.shrink(),
+          ),
         ...extra,
       ];
 
@@ -55,6 +60,12 @@ void main() {
     expect(find.text('Selasa, 17 Nov 2026'), findsOneWidget);
     expect(find.text('Selamat Malam, Pengguna'), findsOneWidget);
     expect(find.text('Snapshot Hari Ini'.toUpperCase()), findsOneWidget);
+    await tester.dragUntilVisible(
+      find.text('Hesych'),
+      find.byType(ListView),
+      const Offset(0, -250),
+    );
+    await tester.pumpAndSettle();
     expect(find.byType(AppTile), findsNWidgets(appCatalog.length));
     expect(find.text('0/0 Habit Selesai'), findsOneWidget);
     expect(find.text('Rp 0'), findsOneWidget);
@@ -86,6 +97,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    await tester.dragUntilVisible(
+      find.widgetWithText(AppTile, 'Daily OS'),
+      find.byType(ListView),
+      const Offset(0, -250),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(AppTile, 'Daily OS'));
     await tester.pumpAndSettle();
 
