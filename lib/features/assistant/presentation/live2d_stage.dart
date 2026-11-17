@@ -68,80 +68,72 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
   @override
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.tokens.surface,
-        borderRadius: BorderRadius.circular(EcosystemRadii.lg),
-        border: Border.all(color: colors.tokens.border),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (_url == null && _error == null)
-            const Center(child: LoadingSkeleton(width: 160, height: 18))
-          else if (_error != null)
-            _Fallback(error: _error!)
-          else
-            InAppWebView(
-              initialUrlRequest: URLRequest(url: WebUri(_url!)),
-              initialSettings: InAppWebViewSettings(
-                transparentBackground: true,
-                javaScriptEnabled: true,
-                disableVerticalScroll: true,
-                disableHorizontalScroll: true,
-                mediaPlaybackRequiresUserGesture: false,
-                allowsInlineMediaPlayback: true,
-                supportZoom: false,
-              ),
-              onConsoleMessage: (controller, consoleMessage) {
-                debugPrint('Rem console: ${consoleMessage.message}');
-              },
-              onLoadError: (controller, url, code, message) {
-                setState(() {
-                  _error = 'Panggung gagal dimuat ($code).';
-                });
-              },
-              onWebViewCreated: (controller) {
-                controller.addJavaScriptHandler(
-                  handlerName: 'remEvent',
-                  callback: (args) {
-                    if (args.isNotEmpty && args.first is String) {
-                      _handleEvent(args.first as String);
-                    }
-                    return null;
-                  },
-                );
-              },
-              onLoadStop: (controller, url) async {
-                final bridge = WebViewLive2DBridge(controller);
-                _bridge = bridge;
-                ref.read(live2dBridgeProvider.notifier).state = bridge;
-                await bridge.init();
-              },
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        if (_url == null && _error == null)
+          const Center(child: LoadingSkeleton(width: 160, height: 18))
+        else if (_error != null)
+          _Fallback(error: _error!)
+        else
+          InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(_url!)),
+            initialSettings: InAppWebViewSettings(
+              transparentBackground: true,
+              javaScriptEnabled: true,
+              disableVerticalScroll: true,
+              disableHorizontalScroll: true,
+              mediaPlaybackRequiresUserGesture: false,
+              allowsInlineMediaPlayback: true,
+              supportZoom: false,
             ),
-          if (!_ready && _error == null)
-            Positioned(
-              left: EcosystemSpacing.x3,
-              bottom: EcosystemSpacing.x3,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: EcosystemSpacing.x3,
-                  vertical: EcosystemSpacing.x1,
-                ),
-                decoration: BoxDecoration(
-                  color: colors.tokens.surfaceAlt,
-                  borderRadius: BorderRadius.circular(EcosystemRadii.sm),
-                  border: Border.all(color: colors.tokens.border),
-                ),
-                child: Text(
-                  'Menyiapkan Rem…',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+            onConsoleMessage: (controller, consoleMessage) {
+              debugPrint('Rem console: ${consoleMessage.message}');
+            },
+            onLoadError: (controller, url, code, message) {
+              setState(() {
+                _error = 'Panggung gagal dimuat ($code).';
+              });
+            },
+            onWebViewCreated: (controller) {
+              controller.addJavaScriptHandler(
+                handlerName: 'remEvent',
+                callback: (args) {
+                  if (args.isNotEmpty && args.first is String) {
+                    _handleEvent(args.first as String);
+                  }
+                  return null;
+                },
+              );
+            },
+            onLoadStop: (controller, url) async {
+              final bridge = WebViewLive2DBridge(controller);
+              _bridge = bridge;
+              ref.read(live2dBridgeProvider.notifier).state = bridge;
+              await bridge.init();
+            },
+          ),
+        if (!_ready && _error == null)
+          Positioned(
+            left: EcosystemSpacing.x3,
+            bottom: 36,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: EcosystemSpacing.x3,
+                vertical: EcosystemSpacing.x1,
+              ),
+              decoration: BoxDecoration(
+                color: colors.tokens.surfaceAlt,
+                borderRadius: BorderRadius.circular(EcosystemRadii.sm),
+                border: Border.all(color: colors.tokens.border),
+              ),
+              child: Text(
+                'Menyiapkan Rem…',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

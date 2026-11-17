@@ -84,7 +84,9 @@ class EcosystemAccents {
 abstract final class EcosystemRadii {
   static const double sm = 12;
   static const double md = 16;
+  static const double bubble = 18;
   static const double lg = 20;
+  static const double xl = 24;
 }
 
 abstract final class EcosystemSpacing {

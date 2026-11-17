@@ -60,6 +60,76 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  testWidgets('renders the editorial header above the chat sheet',
+      (tester) async {
+    await pumpPage(tester);
+
+    expect(find.text('Rem'), findsOneWidget);
+    expect(find.text('AI Companion'), findsOneWidget);
+    expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
+    expect(find.byKey(const Key('assistant-chat-toggle')), findsOneWidget);
+  });
+
+  testWidgets('settings action announces it is coming soon', (tester) async {
+    await pumpPage(tester);
+
+    await tester.tap(find.byIcon(Icons.settings_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Pengaturan karakter segera hadir'), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('chat toggle hides the sheet and expands the stage',
+      (tester) async {
+    await pumpPage(tester);
+
+    final collapsed = tester.getSize(find.byKey(const Key('assistant-stage')));
+    expect(
+      find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const Key('assistant-chat-toggle')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
+      findsNothing,
+    );
+    final expanded = tester.getSize(find.byKey(const Key('assistant-stage')));
+    expect(expanded.height, greaterThan(collapsed.height));
+
+    await tester.tap(find.byKey(const Key('assistant-chat-toggle')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byKey(const Key('assistant-stage'))).height,
+      collapsed.height,
+    );
+  });
+
+  testWidgets('swiping the sheet handle down closes the chat', (tester) async {
+    await pumpPage(tester);
+
+    await tester.drag(
+      find.byKey(const Key('assistant-sheet-handle')),
+      const Offset(0, 80),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
+      findsNothing,
+    );
+  });
+
   testWidgets('sending a message streams the reply into the chat',
       (tester) async {
     await pumpPage(tester);
