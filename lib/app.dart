@@ -1,52 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
-import 'core/theme/tokens.dart';
 
-class EcosystemApp extends StatelessWidget {
+class EcosystemApp extends ConsumerWidget {
   const EcosystemApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
       title: 'EcosystemKu',
       debugShowCheckedModeBanner: false,
       theme: EcosystemTheme.light(),
       darkTheme: EcosystemTheme.dark(),
-      themeMode: ThemeMode.system,
-      home: const _BootstrapPage(),
-    );
-  }
-}
-
-class _BootstrapPage extends StatelessWidget {
-  const _BootstrapPage();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(EcosystemSpacing.x6),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('EcosystemKu', style: TextStyle(
-                fontFamily: 'DMSerifDisplay',
-                fontSize: 36,
-                color: colors.tokens.text,
-              )),
-              const SizedBox(height: EcosystemSpacing.x2),
-              Text(
-                'Asisten, Apps, dan Setelan sedang disiapkan.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        ),
-      ),
+      themeMode: ThemeMode.dark,
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

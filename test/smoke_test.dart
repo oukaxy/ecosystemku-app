@@ -1,11 +1,14 @@
 import 'package:ecosystemku/app.dart';
 import 'package:ecosystemku/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('EcosystemApp renders without exceptions', (tester) async {
-    await tester.pumpWidget(const EcosystemApp());
+    await tester.pumpWidget(
+      const ProviderScope(child: EcosystemApp()),
+    );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     expect(find.text('EcosystemKu'), findsOneWidget);
