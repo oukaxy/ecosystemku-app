@@ -101,7 +101,10 @@ void main() {
     expect(inspection.manifest.counts['ideas'], 1);
     expect(inspection.manifest.counts['links'], 2);
     expect(inspection.manifest.includesPrivateLinks, isTrue);
-    expect(inspection.warnings, isEmpty);
+    expect(
+      inspection.warnings,
+      contains('Link privat di backup memerlukan PIN.'),
+    );
 
     final archive = ZipDecoder().decodeBytes(bytes);
     final linkku = jsonDecode(

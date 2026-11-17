@@ -78,7 +78,9 @@ class BackupService {
     final inspection = await inspect(bytes);
     final archive = _decode(bytes);
     final tables = <String, List<Map<String, dynamic>>>{};
-    final warnings = <String>[...inspection.warnings];
+    final warnings = <String>[
+      ...inspection.warnings.where((w) => pin == null || !w.contains('PIN')),
+    ];
     final counts = <String, int>{};
 
     void addAll(String table, dynamic rows) {
