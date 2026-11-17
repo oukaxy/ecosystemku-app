@@ -135,8 +135,8 @@ class _ChatPanelState extends ConsumerState<ChatPanel> {
               ),
               const SizedBox(width: EcosystemSpacing.x2),
               SizedBox(
-                width: 44,
-                height: 44,
+                width: 48,
+                height: 48,
                 child: FilledButton(
                   onPressed: state.isStreaming
                       ? () =>
