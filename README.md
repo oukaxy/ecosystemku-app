@@ -29,7 +29,7 @@ build_runner, format, analyze, test, build APK debug.
 - Model Rem ada di `assets/live2d/rem/` — **sumber kanonik** untuk repo ini.
   Jangan edit salinan app langsung; perubahan model dilakukan di sini.
 - Runtime (`vendor/`: Cubism Core, Pixi 6.5.10, pixi-live2d-display 0.4.0)
-  di-vendor offline; halaman adapter di `assets/live2d/web/`.
+  di-vendor offline; halaman adapter di `assets/live2d/` (documentRoot server localhost).
 - `assets/live2d/rem/checksums.sha256` diverifikasi oleh
   `test/features/assistant/live2d_assets_test.dart`.
 

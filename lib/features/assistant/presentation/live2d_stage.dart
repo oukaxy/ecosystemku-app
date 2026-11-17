@@ -94,6 +94,17 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
                 allowsInlineMediaPlayback: true,
                 supportZoom: false,
               ),
+              onConsoleMessage: (controller, consoleMessage) {
+                debugPrint(
+                  'Rem console[${consoleMessage.messageLevel.name}]: '
+                  '${consoleMessage.message}',
+                );
+              },
+              onLoadError: (controller, url, code, message) {
+                setState(() {
+                  _error = 'Panggung gagal dimuat ($code).';
+                });
+              },
               onWebViewCreated: (controller) {
                 controller.addJavaScriptHandler(
                   handlerName: 'remEvent',

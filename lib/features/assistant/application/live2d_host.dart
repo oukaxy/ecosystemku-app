@@ -14,7 +14,7 @@ class Live2DHost {
     if (existing != null && existing.isRunning()) return baseUrl;
     await existing?.close();
     final server = InAppLocalhostServer(
-      documentRoot: 'assets/live2d/web',
+      documentRoot: 'assets/live2d',
       port: 8080,
     );
     await server.start();
