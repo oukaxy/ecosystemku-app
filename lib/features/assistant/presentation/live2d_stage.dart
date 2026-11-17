@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../core/widgets/loading_skeleton.dart';
-import 'live2d_bridge.dart';
-import 'live2d_host.dart';
+import '../application/live2d_bridge.dart';
+import '../application/live2d_host.dart';
 
 class Live2DStage extends ConsumerStatefulWidget {
   const Live2DStage({super.key, this.onEvent});
@@ -82,7 +82,7 @@ class _Live2DStageState extends ConsumerState<Live2DStage> {
             _Fallback(error: _error!)
           else
             InAppWebView(
-              initialUrlRequest: URLRequest(url: Uri.parse(_url!)),
+              initialUrlRequest: URLRequest(url: WebUri(_url!)),
               initialSettings: InAppWebViewSettings(
                 transparentBackground: true,
                 javaScriptEnabled: true,

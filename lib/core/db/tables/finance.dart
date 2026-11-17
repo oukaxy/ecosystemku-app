@@ -33,6 +33,7 @@ class Accounts extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@DataClassName('CategoryFinance')
 class CategoriesFinance extends Table {
   TextColumn get id => text()();
   TextColumn get name => text()();

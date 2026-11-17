@@ -24,7 +24,7 @@ class MetaDao {
   Future<void> saveProfile({String? name, String? avatarPath}) =>
       db.into(db.profiles).insertOnConflictUpdate(
             ProfilesCompanion.insert(
-              id: 1,
+              id: const Value(1),
               name: Value(name),
               avatarPath: Value(avatarPath),
             ),
