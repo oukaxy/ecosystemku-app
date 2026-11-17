@@ -40,4 +40,12 @@ class BackupDao {
       }
     });
   }
+
+  Future<void> clearTables(List<String> tables) async {
+    await db.transaction(() async {
+      for (final table in tables) {
+        await db.customStatement('DELETE FROM "$table"');
+      }
+    });
+  }
 }

@@ -1,0 +1,22 @@
+{
+  "pin": "1234",
+  "pinHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+  "ep": "AAECAwQFBgcICQoLbjplU7aIHun5+Lyvdhk4Lb+EGYdX2xjT/iEdye7L8C+gTapzkH+MR2z0TnaFLAt1SSnBHsULcMPMMi3N8FDHUwxSbe9ypCDzVJjPdDkTJU7TMJ6Oarn5bB8Ie/oJn/YdGue0Y+uM3ZODUvFGLPenGmQ7oM92JjSVIpFBiD80zCmCWDDUWI2JQaL/uspAmhhdVHPdIzTfYJNwAxiSPSWV",
+  "expected": {
+    "links": [
+      {
+        "id": "p1",
+        "url": "https://rahasia.test",
+        "title": "Rahasia",
+        "isPrivate": true
+      }
+    ],
+    "cats": [
+      {
+        "id": "pc1",
+        "name": "Pribadi",
+        "isPrivate": true
+      }
+    ]
+  }
+}

@@ -5,7 +5,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'backup/backup_service.dart';
 import 'db/clock.dart';
+import 'db/daos/backup_dao.dart';
 import 'db/daos/daily_os_dao.dart';
 import 'db/daos/finance_dao.dart';
 import 'db/daos/ideku_dao.dart';
@@ -13,6 +15,9 @@ import 'db/daos/kronik_dao.dart';
 import 'db/daos/linkku_dao.dart';
 import 'db/daos/meta_dao.dart';
 import 'db/database.dart';
+import 'security/link_crypto.dart';
+import 'security/secure_keys.dart';
+import 'security/secure_store.dart';
 import '../features/cucimoney/data/finance_repository.dart';
 import '../features/cucimoney/data/finance_summary.dart';
 import '../features/daily_os/data/daily_os_repository.dart';
@@ -39,6 +44,24 @@ LazyDatabase _openDatabase() => LazyDatabase(() async {
     });
 
 final clockProvider = Provider<Clock>((ref) => const SystemClock());
+
+final secureStoreProvider = Provider<SecureStore>((ref) => FlutterSecureStore());
+final secureKeysProvider = Provider<SecureKeys>(
+  (ref) => SecureKeys(ref.watch(secureStoreProvider)),
+);
+final linkCryptoProvider = Provider<LinkCrypto>((ref) => LinkCrypto());
+
+final backupDaoProvider = Provider<BackupDao>(
+  (ref) => BackupDao(ref.watch(databaseProvider)),
+);
+final backupServiceProvider = Provider<BackupService>(
+  (ref) => BackupService(
+    db: ref.watch(databaseProvider),
+    dao: ref.watch(backupDaoProvider),
+    crypto: ref.watch(linkCryptoProvider),
+    clock: ref.watch(clockProvider),
+  ),
+);
 
 final metaDaoProvider = Provider<MetaDao>(
   (ref) => MetaDao(ref.watch(databaseProvider)),
