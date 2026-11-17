@@ -65,11 +65,12 @@ void main() {
 
     expect(find.text('PROFIL'), findsOneWidget);
     expect(find.text('KUNCI AI'), findsOneWidget);
-    expect(find.text('BACKUP'), findsOneWidget);
-    expect(find.text('TAMPILAN'), findsOneWidget);
-    expect(find.text('NOTIFIKASI'), findsOneWidget);
-    expect(find.text('DATA'), findsOneWidget);
-    expect(find.text('TENTANG'), findsOneWidget);
+    final scrollable = find.byType(Scrollable).first;
+    for (final header in ['BACKUP', 'TAMPILAN', 'NOTIFIKASI', 'DATA', 'TENTANG']) {
+      await tester.scrollUntilVisible(find.text(header), 350, scrollable: scrollable);
+      await tester.pumpAndSettle();
+      expect(find.text(header), findsOneWidget);
+    }
   });
 
   testWidgets('shows masked keys from secure storage', (tester) async {

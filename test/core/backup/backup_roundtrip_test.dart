@@ -166,7 +166,7 @@ void main() {
     await seed();
     final bytes = await service.exportBytes(pin: '1234');
     await db.customStatement(
-      'UPDATE ideas SET title = ?, updatedAt = ? WHERE id = ?',
+      'UPDATE ideas SET title = ?, updated_at = ? WHERE id = ?',
       ['Versi lokal', 999, 'i1'],
     );
 

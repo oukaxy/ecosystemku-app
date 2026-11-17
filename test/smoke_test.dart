@@ -19,7 +19,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.text('EcosystemKu'), findsOneWidget);
+    expect(find.textContaining('Selamat'), findsOneWidget);
+    expect(find.text('Snapshot Hari Ini'.toUpperCase()), findsOneWidget);
   });
 
   testWidgets('bootstrap layout survives text scale 1.3', (tester) async {

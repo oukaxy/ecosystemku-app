@@ -9,7 +9,7 @@ import '../db/daos/backup_dao.dart';
 import '../db/database.dart';
 import '../security/link_crypto.dart';
 import 'backup_exporter.dart';
-import 'backup_model.dart';
+import 'backup_model.dart' show BackupException, BackupManifest, camelKeyToSql, sqlKeyToCamel;
 
 class BackupService {
   BackupService({
@@ -268,10 +268,13 @@ class BackupService {
 
     for (final raw in rows) {
       final row = <String, Object?>{};
+      final camelRow = <String, Object?>{};
       for (final entry in raw.entries) {
-        if (columns.contains(entry.key)) {
-          row[entry.key] = _sqlValue(entry.value);
-        }
+        var sqlName = entry.key;
+        if (!columns.contains(sqlName)) sqlName = camelKeyToSql(entry.key);
+        if (!columns.contains(sqlName)) continue;
+        row[sqlName] = _sqlValue(entry.value);
+        camelRow[sqlKeyToCamel(sqlName)] = entry.value;
       }
       if (row.isEmpty) continue;
 
@@ -283,7 +286,12 @@ class BackupService {
               variables: [Variable(id)],
             )
             .getSingleOrNull();
-        if (existing != null && !_isNewer(row, existing.data)) continue;
+        if (existing != null) {
+          final existingCamel = <String, Object?>{
+            for (final e in existing.data.entries) sqlKeyToCamel(e.key): e.value,
+          };
+          if (!_isNewer(camelRow, existingCamel)) continue;
+        }
       }
       await _upsert(table, row);
     }

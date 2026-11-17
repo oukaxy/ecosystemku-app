@@ -60,6 +60,8 @@ void main() {
     expect(find.text('Selasa, 17 Nov 2026'), findsOneWidget);
     expect(find.text('Selamat Malam, Pengguna'), findsOneWidget);
     expect(find.text('Snapshot Hari Ini'.toUpperCase()), findsOneWidget);
+    expect(find.text('0/0 Habit Selesai'), findsOneWidget);
+    expect(find.text('Rp 0'), findsOneWidget);
     await tester.dragUntilVisible(
       find.text('Hesych'),
       find.byType(ListView),
@@ -67,8 +69,6 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(AppTile), findsNWidgets(appCatalog.length));
-    expect(find.text('0/0 Habit Selesai'), findsOneWidget);
-    expect(find.text('Rp 0'), findsOneWidget);
   });
 
   testWidgets('finance card error does not break other cards', (tester) async {

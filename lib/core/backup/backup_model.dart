@@ -2,6 +2,21 @@ import 'dart:typed_data';
 
 enum BackupImportMode { merge, replace }
 
+/// Drift generates snake_case SQL columns while the legacy web backup
+/// contract uses camelCase keys. Convert at the backup boundary.
+String sqlKeyToCamel(String key) {
+  final parts = key.split('_');
+  if (parts.length <= 1) return key;
+  final rest = [
+    for (final part in parts.skip(1))
+      part.isEmpty ? part : '${part[0].toUpperCase()}${part.substring(1)}',
+  ].join();
+  return '${parts.first}$rest';
+}
+
+String camelKeyToSql(String key) =>
+    key.replaceAllMapped(RegExp('[A-Z]'), (m) => '_${m.group(0)!.toLowerCase()}');
+
 class BackupException implements Exception {
   BackupException(this.message);
 

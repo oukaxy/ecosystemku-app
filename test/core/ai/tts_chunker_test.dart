@@ -34,8 +34,9 @@ void main() {
   });
 
   test('returns at most four chunks', () {
-    final text = List.generate(10, (i) => 'Kalimat nomor ${i + 1}.').join(' ');
+    final text = List.generate(10, (_) => 'x' * 300 + '.').join(' ');
     final chunks = chunkForTts(text);
     expect(chunks.length, 4);
+    expect(chunks.every((c) => c.length <= 500), isTrue);
   });
 }

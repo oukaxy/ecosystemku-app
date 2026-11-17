@@ -7,7 +7,7 @@ import '../db/clock.dart';
 import '../db/daos/backup_dao.dart';
 import '../db/database.dart';
 import '../security/link_crypto.dart';
-import 'backup_model.dart';
+import 'backup_model.dart' show BackupManifest, PrivateLinksNeedPin, sqlKeyToCamel;
 import 'backup_service.dart';
 
 /// Builds the canonical ZIP v3 payload (mahfud 6.1).
@@ -28,7 +28,14 @@ class BackupExporter {
     String? pin,
     required bool requirePinForPrivate,
   }) async {
-    final tables = await dao.readAll(backupTableNames);
+    final raw = await dao.readAll(backupTableNames);
+    final tables = <String, List<Map<String, Object?>>>{
+      for (final entry in raw.entries)
+        entry.key: [
+          for (final row in entry.value)
+            {for (final e in row.entries) sqlKeyToCamel(e.key): e.value},
+        ],
+    };
     final date = todayString(clock);
     final now = clock.now();
 
