@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:ecosystemku/core/db/daos/daily_os_dao.dart';
 import 'package:ecosystemku/core/db/daos/finance_dao.dart';
@@ -141,7 +141,7 @@ void main() {
           JournalEntriesCompanion.insert(
             id: 'today',
             date: '2026-11-17',
-            title: 'Hari ini',
+            title: const Value('Hari ini'),
             createdAt: 1,
             updatedAt: 1,
           ),
@@ -150,7 +150,7 @@ void main() {
           JournalEntriesCompanion.insert(
             id: 'older',
             date: '2026-11-10',
-            title: 'Minggu lalu',
+            title: const Value('Minggu lalu'),
             createdAt: 1,
             updatedAt: 99,
           ),

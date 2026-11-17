@@ -9,7 +9,7 @@ import '../../../../core/widgets/ecosystem_card.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../apps_hub/domain/app_catalog.dart' show hesychUrl;
 import '../../data/settings_repository.dart';
-import '../settings_providers.dart';
+import '../../application/settings_providers.dart';
 
 class AppearanceSection extends ConsumerWidget {
   const AppearanceSection({super.key});
@@ -153,7 +153,7 @@ class _TimeRow extends StatelessWidget {
               context: context,
               initialTime: initial,
             );
-            if (picked != null) {
+            if (picked != null && context.mounted) {
               onPicked(picked.format(context));
             }
           },

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/backup/backup_model.dart';
-import '../../../../core/backup/backup_service.dart';
 import '../../../../core/db/clock.dart';
 import '../../../../core/db/daos/backup_dao.dart';
 import '../../../../core/db/database.dart';
@@ -38,18 +37,30 @@ class BackupSection extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: FilledButton.icon(
+                    child: FilledButton(
                       onPressed: () => _export(context, ref),
-                      icon: const Icon(Icons.ios_share_rounded, size: 18),
-                      label: const Text('Ekspor sekarang'),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.ios_share_rounded, size: 18),
+                          SizedBox(width: EcosystemSpacing.x2),
+                          Text('Ekspor sekarang'),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: EcosystemSpacing.x2),
                   Expanded(
-                    child: FilledButton.tonal.icon(
+                    child: FilledButton.tonal(
                       onPressed: () => _import(context, ref),
-                      icon: const Icon(Icons.file_open_outlined, size: 18),
-                      label: const Text('Impor'),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.file_open_outlined, size: 18),
+                          SizedBox(width: EcosystemSpacing.x2),
+                          Text('Impor'),
+                        ],
+                      ),
                     ),
                   ),
                 ],

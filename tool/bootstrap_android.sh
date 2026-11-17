@@ -4,6 +4,7 @@ cd "$(dirname "$0")/.."
 
 if [ ! -d android ]; then
   flutter create --platforms=android --org com.oukaxy --project-name ecosystemku .
+  rm -f test/widget_test.dart
 fi
 
 python3 - <<'PY'

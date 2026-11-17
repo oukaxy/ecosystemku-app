@@ -8,7 +8,7 @@ import '../../../../core/theme/tokens.dart';
 import '../../../../core/widgets/ecosystem_card.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../data/profile_repository.dart';
-import '../settings_providers.dart';
+import '../../application/settings_providers.dart';
 
 class ProfileSection extends ConsumerStatefulWidget {
   const ProfileSection({super.key});
@@ -36,7 +36,6 @@ class _ProfileSectionState extends ConsumerState<ProfileSection> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = AppColors.of(context);
     final profile = ref.watch(profileProvider).valueOrNull;
 
     if (!_dirty && _name.text.isEmpty && profile != null) {

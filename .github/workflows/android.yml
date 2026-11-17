@@ -30,6 +30,9 @@ jobs:
       - name: Generate Drift code
         run: dart run build_runner build
 
+      - name: Apply dart fix
+        run: dart fix --apply
+
       - name: Format
         run: dart format .
 

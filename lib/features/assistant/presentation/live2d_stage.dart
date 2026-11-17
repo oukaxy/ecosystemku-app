@@ -5,6 +5,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/tokens.dart';
 import '../../../core/widgets/loading_skeleton.dart';
 import 'live2d_bridge.dart';
 import 'live2d_host.dart';

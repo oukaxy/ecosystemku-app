@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:ecosystemku/core/db/daos/daily_os_dao.dart';
 import 'package:ecosystemku/core/db/daos/finance_dao.dart';
@@ -63,7 +63,7 @@ void main() {
           JournalEntriesCompanion.insert(
             id: 'entry-1',
             date: '2026-11-17',
-            title: 'Pagi',
+            title: const Value('Pagi'),
             createdAt: 1,
             updatedAt: 2,
           ),
@@ -102,7 +102,7 @@ void main() {
           SavedLinksCompanion.insert(
             id: 'link-1',
             url: 'https://example.test',
-            title: 'Contoh',
+            title: const Value('Contoh'),
             ts: 1,
           ),
         );

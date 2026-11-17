@@ -5,7 +5,7 @@ import 'package:ecosystemku/core/db/database.dart';
 import 'package:ecosystemku/core/providers.dart';
 import 'package:ecosystemku/core/widgets/app_tile.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_engine.dart';
-import 'package:ecosystemku/features/apps_hub/domain/app_catalog.dart';
+import 'package:ecosystemku/features/apps_hub/domain/app_catalog.dart' show appCatalog;
 import 'package:ecosystemku/features/cucimoney/data/finance_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

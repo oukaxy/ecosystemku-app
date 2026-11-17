@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:ecosystemku/core/backup/backup_model.dart';
 import 'package:ecosystemku/core/backup/backup_service.dart';
@@ -72,7 +71,7 @@ void main() {
           SavedLinksCompanion.insert(
             id: 'l1',
             url: 'https://publik.test',
-            title: 'Publik',
+            title: const Value('Publik'),
             ts: 1,
           ),
         );
@@ -83,7 +82,7 @@ void main() {
           SavedLinksCompanion.insert(
             id: 'p1',
             url: 'https://rahasia.test',
-            title: 'Rahasia',
+            title: const Value('Rahasia'),
             ts: 2,
             isPrivate: const Value(true),
             privateCatId: const Value('pc1'),

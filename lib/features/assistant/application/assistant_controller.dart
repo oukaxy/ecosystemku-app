@@ -76,7 +76,7 @@ class AssistantController extends StateNotifier<AssistantState> {
         ? content.substring(0, maxMessageChars)
         : content;
     final entry = ChatEntry(role: 'user', text: clipped);
-    final streaming = ChatEntry(role: 'assistant', text: '');
+    const streaming = ChatEntry(role: 'assistant', text: '');
     state = state.copyWith(
       messages: [...state.messages, entry, streaming],
       isStreaming: true,

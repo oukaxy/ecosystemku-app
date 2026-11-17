@@ -83,7 +83,7 @@ class _FakeBridge implements Live2DBridge {
   Future<void> tapZone(String zone) async {}
 }
 
-AssistantController _controller(_FakeAi ai, _FakeBridge bridge) =>
+AssistantController _controller(AiClient ai, _FakeBridge bridge) =>
     AssistantController(ai, () => bridge);
 
 void main() {

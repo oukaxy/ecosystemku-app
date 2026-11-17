@@ -4,7 +4,6 @@ import 'package:ecosystemku/core/db/clock.dart';
 import 'package:ecosystemku/core/db/database.dart';
 import 'package:ecosystemku/core/db/daos/meta_dao.dart';
 import 'package:ecosystemku/core/providers.dart';
-import 'package:ecosystemku/core/security/secure_keys.dart';
 import 'package:ecosystemku/core/security/secure_store.dart';
 import 'package:ecosystemku/features/assistant/application/assistant_engine.dart';
 import 'package:flutter/material.dart';
