@@ -82,11 +82,11 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('chat toggle hides the sheet and expands the stage',
+  testWidgets('chat toggle hides the sheet without resizing the stage',
       (tester) async {
     await pumpPage(tester);
 
-    final collapsed = tester.getSize(find.byKey(const Key('assistant-stage')));
+    final stage = tester.getSize(find.byKey(const Key('assistant-stage')));
     expect(
       find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
       findsOneWidget,
@@ -99,8 +99,10 @@ void main() {
       find.byKey(const Key('assistant-sheet-handle')).hitTestable(),
       findsNothing,
     );
-    final expanded = tester.getSize(find.byKey(const Key('assistant-stage')));
-    expect(expanded.height, greaterThan(collapsed.height));
+    expect(
+      tester.getSize(find.byKey(const Key('assistant-stage'))),
+      stage,
+    );
 
     await tester.tap(find.byKey(const Key('assistant-chat-toggle')));
     await tester.pumpAndSettle();
@@ -110,8 +112,8 @@ void main() {
       findsOneWidget,
     );
     expect(
-      tester.getSize(find.byKey(const Key('assistant-stage'))).height,
-      collapsed.height,
+      tester.getSize(find.byKey(const Key('assistant-stage'))),
+      stage,
     );
   });
 

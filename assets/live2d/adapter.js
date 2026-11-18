@@ -2,6 +2,7 @@
   'use strict';
 
   var MODEL_URL = 'rem/Character.model3.json';
+  var AUDIO_BASE = 'rem/audio/';
 
   // Parameter Rem — sama dengan params di rem/character.json.
   var P = {
@@ -45,6 +46,13 @@
   var smoothCX = 0.5;
   var smoothCY = 0.5;
   var smoothMouth = 0;
+  var paused = false;
+  var pointerDown = false;
+  var pointerMoved = false;
+  var pointerStartX = 0;
+  var pointerStartY = 0;
+  var tapCooldown = 0;
+  var TAP_COOLDOWN_MS = 900;
 
   function send(type, payload) {
     var message = Object.assign({ type: type }, payload || {});
@@ -325,6 +333,21 @@
     serious: 2, proud: 1, doubt: 1, puzzle: 3, appeal: 3, smile: 1, idle: 5,
   };
 
+  var ZONE_REACTIONS = {
+    head: {
+      expression: 'shame',
+      sounds: ['head_1.mp3', 'head_2.mp3', 'head_3.mp3', 'head_4.mp3', 'head_5.mp3'],
+    },
+    body: {
+      expression: 'surprise',
+      sounds: ['body_1.mp3', 'body_2.mp3', 'body_3.mp3', 'body_4.mp3'],
+    },
+    leg: {
+      expression: 'appeal',
+      sounds: ['leg_1.mp3', 'leg_2.mp3', 'leg_3.mp3'],
+    },
+  };
+
   var ALL_HAND_PARAMS = [
     'PARAM_HAND_R_01', 'PARAM_HAND_R_02', 'PARAM_HAND_R_03', 'PARAM_HAND_R_04',
     'PARAM_HAND_R_05', 'PARAM_HAND_R_06', 'PARAM_HAND_R_07', 'PARAM_HAND_R_08',
@@ -449,6 +472,63 @@
     }
   }
 
+  function playAssetAudio(file) {
+    if (!file || muted) return;
+    ensureAudioContext();
+    stopAudio();
+    try {
+      audio = new Audio(AUDIO_BASE + file);
+      audio.crossOrigin = 'anonymous';
+      if (audioContext && analyser) {
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+      }
+      audio.onended = function () {
+        speaking = false;
+        send('audioEnded', {});
+      };
+      audio.onerror = function () {
+        speaking = false;
+        send('audioEnded', {});
+      };
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      speaking = true;
+      var played = audio.play();
+      if (played && played.catch) {
+        played.catch(function () {
+          speaking = false;
+          send('audioEnded', {});
+        });
+      }
+      send('audioStarted', {});
+    } catch (error) {
+      speaking = false;
+    }
+  }
+
+  function pickRandom(list) {
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function zoneAt(clientX, clientY) {
+    var x = clientX / window.innerWidth;
+    var y = clientY / window.innerHeight;
+    if (y < 0.48 && x > 0.12 && x < 0.88) return 'head';
+    if (y >= 0.48 && y < 0.75 && x > 0.15 && x < 0.85) return 'body';
+    if (y >= 0.75 && y < 0.95 && x > 0.20 && x < 0.80) return 'leg';
+    return null;
+  }
+
+  function reactToZone(zone) {
+    if (!model || paused || speaking) return;
+    var reaction = ZONE_REACTIONS[zone] || ZONE_REACTIONS.body;
+    setExpression(reaction.expression, 4000);
+    playAssetAudio(pickRandom(reaction.sounds));
+    send('tapZone', { zone: zone, expression: reaction.expression });
+  }
+
   /* ── Public API ─────────────────────────────────────────────── */
   function init(options) {
     if (ready) {
@@ -513,6 +593,45 @@
         if (t) updateCursor(t.clientX, t.clientY);
       }, { passive: true });
 
+      canvas.addEventListener('pointerdown', function (e) {
+        pointerDown = true;
+        pointerMoved = false;
+        pointerStartX = e.clientX;
+        pointerStartY = e.clientY;
+        updateCursor(e.clientX, e.clientY);
+        ensureAudioContext();
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+      });
+
+      canvas.addEventListener('pointermove', function (e) {
+        if (pointerDown &&
+            (Math.abs(e.clientX - pointerStartX) > 10 ||
+             Math.abs(e.clientY - pointerStartY) > 10)) {
+          pointerMoved = true;
+        }
+        updateCursor(e.clientX, e.clientY);
+      });
+
+      canvas.addEventListener('pointerup', function (e) {
+        if (!pointerDown) return;
+        pointerDown = false;
+        if (pointerMoved || Date.now() < tapCooldown) return;
+        var zone = zoneAt(e.clientX, e.clientY);
+        if (!zone) return;
+        tapCooldown = Date.now() + TAP_COOLDOWN_MS;
+        reactToZone(zone);
+      });
+
+      canvas.addEventListener('pointercancel', function () {
+        pointerDown = false;
+      });
+
+      canvas.addEventListener('pointerleave', function () {
+        pointerDown = false;
+      });
+
       try {
         model.motion('idle', 0, 2);
       } catch (_) {}
@@ -527,7 +646,7 @@
     });
   }
 
-  function setExpression(name) {
+  function setExpression(name, revertMs) {
     if (!model) return;
     var expression = name || 'none';
     currentExpr = expression;
@@ -540,7 +659,7 @@
     if (expression !== 'none') {
       expressionTimer = setTimeout(function () {
         if (currentExpr === expression) setExpression('none');
-      }, 6000);
+      }, revertMs || 6000);
     }
   }
 
@@ -554,8 +673,9 @@
   }
 
   function setPaused(value) {
+    paused = !!value;
     if (!app) return;
-    if (value) {
+    if (paused) {
       app.ticker.stop();
       stopAudio();
     } else {
@@ -564,11 +684,7 @@
   }
 
   function tapZone(zone) {
-    if (!model) return;
-    var reactions = ['happy', 'smile', 'surprise', 'shame'];
-    var pick = reactions[Math.floor(Math.random() * reactions.length)];
-    setExpression(pick);
-    send('expressionChanged', { name: pick, zone: zone });
+    reactToZone(zone);
   }
 
   window.remBridge = {

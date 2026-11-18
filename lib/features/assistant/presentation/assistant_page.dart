@@ -53,13 +53,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                   return ClipRect(
                     child: Stack(
                       children: [
-                        AnimatedPositioned(
-                          duration: duration,
-                          curve: Curves.easeOutCubic,
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          bottom: _chatOpen ? sheetHeight - 20 : 0,
+                        Positioned.fill(
                           child: Container(
                             key: const Key('assistant-stage'),
                             decoration: BoxDecoration(

@@ -171,10 +171,8 @@ class AssistantController extends StateNotifier<AssistantState> {
       for (final chunk in chunks) {
         final audio = await _ai.tts(chunk);
         if (audio.isEmpty) continue;
-        bridge.setSpeaking(true);
         await bridge.playAudio(base64Encode(audio), 'audio/mpeg');
       }
-      if (chunks.isNotEmpty) bridge.setSpeaking(false);
     } on AiException {
       // Chat text already rendered; TTS is best-effort.
     }
